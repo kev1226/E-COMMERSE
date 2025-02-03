@@ -1,6 +1,6 @@
 import User from "../models/user.model.js"
 import bcrypt from 'bcryptjs'
-import {createAccessToken} from "../libs/jwt.js";
+import { createAccessToken } from "../libs/jwt.js";
 
 export const register = async (req, res) => {
     const { email, password, username } = req.body
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
         const userSaved = await newUser.save();
         const token = await createAccessToken({ id: userSaved._id })
 
-        res.cookie('token', token)
+        res.cookie("token", token)
 
         res.json({
             id: userSaved._id,
@@ -29,7 +29,7 @@ export const register = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({ message: error.message })
     }
 };
 
@@ -37,13 +37,15 @@ export const login = async (req, res) => {
     const { email, password } = req.body
     try {
 
-        const UserFound = await User.findOne({email})
-        if (!UserFound) return res.status(400).json({message: 
-            "User not fount"})
+        const UserFound = await User.findOne({ email })
+        if (!UserFound) return res.status(400).json({
+            message:
+                "User not fount"
+        })
 
         // comparando contraseña
         const isMatch = await bcrypt.compare(password, UserFound.password)
-        
+
         if (!isMatch) return register.status(400).json({
             message: "Incorrect Password"
         })
@@ -62,8 +64,14 @@ export const login = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({ message: error.message })
     }
 };
 
+export const logout = (req, res) => {
+    res.cookie("token", "", {
+        expires: new Date(0)
+    });
+    return res.sendStatus(200);
+}
 
