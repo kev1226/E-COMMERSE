@@ -9,13 +9,13 @@ export const registerSchema = z.object({
         required_error: "email is required"
     })
         .email({
-            required_error: "Invalid email"
+            message: "Invalid email"
         }),
     password: z.string({
         required_error: "Password is required"
     })
         .min(8, {
-            required_error: "Password must be at least 8 characters"
+            message: "Password must be at least 8 characters"
         })
 })
 
@@ -24,12 +24,12 @@ export const loginSchema = z.object({
         required_error: "Email is required"
     })
         .email({
-            required_error: "Invalid email"
+            message: "Email is not valid"
         }),
     password: z.string({
         required_error: "Password is required"
     })
         .min(8, {
-            required_error: "Password must be at least 8 characters"
+            message: "Password must be at least 8 characters"
         })
 })
